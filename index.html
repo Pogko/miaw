@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Minat Bakat</title>
+    <style type="text/css" media="all">
+      body {
+        background: linear-gradient(to top, rgba(6, 68, 90, 1), rgba(200, 201, 223, 1));
+        background-repeat: no-repeat;
+        background-position: center top;
+        background-attachment: fixed;
+        background-size: cover;
+        font-family: Arial, sans-serif;
+        color: white;
+        padding: 20px;
+        margin: 0;
+      }
+
+      h1 {
+        text-align: center;
+        font-size: 2rem;
+        margin-bottom: 20px;
+      }
+
+      .questions {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(50px);
+        width: 90%;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        box-shadow: 0px 0px 20px 2px black;
+        border-radius: 20px;
+        text-align: left;
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .bx {
+        margin-bottom: 25px;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .bx label {
+        font-size: 1rem;
+        margin-bottom: 10px;
+      }
+
+      select {
+        border: none;
+        background-color: rgba(66, 68, 90, 0.5);
+        color: white;
+        padding: 10px;
+        border-radius: 10px;
+        width: 100%;
+        font-size: 1rem;
+      }
+
+      .button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+      }
+
+      button {
+        display: flex;
+        align-items: center;
+        border-radius: 10px;
+        padding: 10px 40px;
+        background-color: rgba(236, 212, 223, 0);
+        border: none;
+        backdrop-filter: blur(50px);
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.38);
+        color: white;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+
+      button:hover {
+        background-color: rgba(236, 212, 223, 0.2);
+      }
+
+      .result {
+        margin-top: 20px;
+        padding: 20px;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        color: white;
+        width: 100%;
+        text-align: center;
+      }
+
+      /* Responsive Styles */
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 1.8rem;
+        }
+
+        .questions {
+          width: 95%;
+          padding: 15px;
+        }
+
+        .bx label {
+          font-size: 0.9rem;
+        }
+
+        select {
+          font-size: 0.9rem;
+        }
+
+        button {
+          font-size: 0.9rem;
+          padding: 8px 30px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        h1 {
+          font-size: 1.5rem;
+        }
+
+        .questions {
+          width: 100%;
+          padding: 10px;
+        }
+
+        .bx label {
+          font-size: 0.8rem;
+        }
+
+        select {
+          font-size: 0.8rem;
+          padding: 8px;
+        }
+
+        button {
+          font-size: 0.8rem;
+          padding: 6px 20px;
+        }
+
+        .result {
+          font-size: 0.9rem;
+          padding: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Test Minat Bakat</h1>
+    <div class="questions">
+      <div id="box"></div>
+      <div class="button">
+        <button type="button" onclick="kirim()">Kirim</button>
+      </div>
+      <div id="result" class="result"></div>
+    </div>
+    <script type="text/javascript" charset="utf-8">
+      var b = document.querySelector('.questions');
+      var h = document.getElementById('box');
+      var resultDiv = document.getElementById('result');
+
+      const soalMinatBakat = [
+        // Bidang Akademik
+        [
+          "Seberapa sering Anda menikmati memecahkan masalah matematika atau teka-teki logika?",
+          "Apakah Anda senang melakukan eksperimen sains atau mengamati fenomena alam?",
+          "Seberapa tertarik Anda pada pelajaran sejarah atau budaya?",
+          "Apakah Anda suka menulis esai, cerita, atau puisi?",
+          "Seberapa sering Anda membaca buku atau artikel di luar tugas sekolah?"
+        ],
+        // Bidang Seni dan Kreativitas
+        [
+          "Apakah Anda senang menggambar, melukis, atau membuat karya seni visual?",
+          "Seberapa sering Anda bermain musik atau bernyanyi?",
+          "Apakah Anda tertarik untuk menari atau melakukan gerakan kreatif?",
+          "Seberapa sering Anda membuat kerajinan tangan atau proyek DIY (Do It Yourself)?",
+          "Apakah Anda senang menonton film atau teater?"
+        ],
+        // Bidang Olahraga dan Kesehatan
+        [
+          "Seberapa sering Anda berolahraga atau melakukan aktivitas fisik?",
+          "Apakah Anda tertarik pada olahraga tim seperti sepak bola, basket, atau voli?",
+          "Seberapa sering Anda mengikuti kegiatan luar ruangan seperti hiking atau camping?",
+          "Apakah Anda tertarik mempelajari tentang kesehatan dan nutrisi?",
+          "Seberapa sering Anda merasa termotivasi untuk menjaga kebugaran tubuh?"
+        ],
+        // Bidang Teknis dan Teknologi
+        [
+          "Apakah Anda senang memperbaiki barang elektronik atau mesin?",
+          "Seberapa sering Anda menggunakan komputer atau gadget untuk membuat program atau desain?",
+          "Apakah Anda tertarik pada robotika atau teknologi canggih?",
+          "Seberapa sering Anda membaca tentang perkembangan teknologi terbaru?",
+          "Apakah Anda senang memecahkan masalah teknis atau troubleshooting?"
+        ],
+        // Bidang Sosial dan Kepemimpinan
+        [
+          "Seberapa sering Anda menjadi pemimpin dalam kelompok atau organisasi?",
+          "Apakah Anda senang membantu orang lain atau menjadi relawan?",
+          "Seberapa sering Anda merasa nyaman berbicara di depan umum?",
+          "Apakah Anda tertarik pada isu-isu sosial atau lingkungan?",
+          "Seberapa sering Anda mengikuti kegiatan komunitas atau organisasi sosial?"
+        ],
+        // Bidang Kewirausahaan dan Bisnis
+        [
+          "Apakah Anda senang menjual barang atau ide kepada orang lain?",
+          "Seberapa sering Anda memikirkan cara untuk menghasilkan uang atau bisnis?",
+          "Apakah Anda tertarik pada dunia investasi atau keuangan?",
+          "Seberapa sering Anda membuat rencana untuk mencapai tujuan pribadi atau profesional?",
+          "Apakah Anda senang mengambil risiko untuk mencapai kesuksesan?"
+        ]
+      ];
+
+      const jenisSoal = [
+        "Bidang Akademik",
+        "Bidang Seni dan Kreativitas",
+        "Bidang Olahraga dan Kesehatan",
+        "Bidang Teknis dan Teknologi",
+        "Bidang Sosial dan Kepemimpinan",
+        "Bidang Kewirausahaan dan Bisnis"
+      ];
+
+      var jawaban = ['tidak pernah', 'jarang', 'kadang-kadang', 'sering', 'sangat sering'];
+      var scorecat = {};
+      for (let x = 0; x < soalMinatBakat.length; x++) {
+        var subminbak = soalMinatBakat[x].length;
+        for (let y = 0; y < subminbak; y++) {
+          scorecat[soalMinatBakat[x][y]] = jenisSoal[x];
+        }
+      }
+
+      var sut = {};
+      jenisSoal.forEach(cat => sut[cat] = 0);
+
+      for (let x = 0; x < 30; x++) {
+        let quest = soalMinatBakat[Math.floor(x / 5)][x % 5];
+        let bx = document.createElement('div');
+        bx.classList.add('bx');
+        var c = document.createElement('label');
+        c.innerHTML = `${x + 1}. ${quest}`;
+        var select = document.createElement('select');
+        select.name = `q${x}`;
+        for (let y = 0; y < 5; y++) {
+          var opsi = document.createElement('option');
+          opsi.value = y;
+          opsi.text = jawaban[y];
+          select.appendChild(opsi);
+        }
+        h.appendChild(bx);
+        bx.appendChild(c);
+        bx.appendChild(select);
+      }
+
+      function kirim() {
+        for (let i = 0; i < 30; i++) {
+          let score = parseInt(document.querySelector(`[name=q${i}]`).value);
+          let quest = soalMinatBakat[Math.floor(i / 5)][i % 5];
+          let category = scorecat[quest];
+          sut[category] += score;
+        }
+
+        let sortedCategories = Object.entries(sut).sort((a, b) => b[1] - a[1]);
+        let topMinat = sortedCategories[0][0];
+        let topBakat = sortedCategories[1][0];
+
+        let resultText = `Minat utama Anda: ${topMinat} <br>Bakat utama Anda: ${topBakat}<br><br>Anda disarankan untuk mengeksplorasi lebih lanjut bidang ini karena Anda memiliki potensi besar di dalamnya!`;
+        resultDiv.innerHTML = resultText;
+      }
+    </script>
+  </body>
+</html>
