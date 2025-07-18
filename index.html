@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Minat dan Bakat - OSIS SMPN 36</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  </head>
+<body>
+  <div class="loading-screen">
+    <div class="loading-logo"></div>
+    <div class="loading-text">Memuat Tes Minat dan Bakat...</div>
+  </div>
+
+  <header>
+    <div class="header-content">
+      <div class="logos-container">
+        <div class="logo-placeholder">
+          <img src="36.png" alt="Logo Sekolah">
+        </div>
+        <div class="logo-placeholder">
+          <img src="osis.png" alt="Logo OSIS">
+        </div>
+      </div>
+      <div class="title-container">
+        <h1>OSIS SMPN 36</h1>
+        <h3>Tes Minat dan Bakat</h3>
+      </div>
+    </div>
+  </header>
+
+  <div class="bubbles" id="bubbles"></div>
+
+  <div class="container">
+    <div class="soal-container" id="soal-container"></div>
+  </div>
+
+  <button id="submitBtn" onclick="lihatHasil()">
+    <i class="fas fa-chart-bar"></i> Lihat Hasil
+  </button>
+
+  <div class="container">
+    <div id="hasil"></div>
+  </div>
+
+  <script>
+    function createBubbles() {
+      const bubblesContainer = document.getElementById('bubbles');
+      const bubbleCount = 12;
+      
+      for (let i = 0; i < bubbleCount; i++) {
+        const bubble = document.createElement('div');
+        bubble.classList.add('bubble');
+        
+        const size = Math.random() * 60 + 20;
+        bubble.style.width = `${size}px`;
+        bubble.style.height = `${size}px`;
+        
+        bubble.style.left = `${Math.random() * 100}%`;
+        bubble.style.top = `${Math.random() * 100}%`;
+        
+        bubble.style.animationDelay = `${Math.random() * 10}s`;
+        bubble.style.animationDuration = `${Math.random() * 15 + 10}s`;
+        
+        bubblesContainer.appendChild(bubble);
+      }
+    }
+
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        document.querySelector('.loading-screen').classList.add('hidden');
+      }, 1200);
+      
+      createBubbles();
+  
+      window.addEventListener('scroll', function() {
+        const header = document.querySelector('header');
+        if (window.scrollY > 50) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
+      });
+    });
+
+    const soalList = [
+      { pertanyaan: "Saya suka memecahkan soal matematika.", kategori: "matematika" },
+      { pertanyaan: "Saya tertarik memahami teori fisika.", kategori: "matematika" },
+      { pertanyaan: "Saya suka bermain dengan angka dan logika.", kategori: "matematika" },
+      { pertanyaan: "Saya senang membaca puisi atau cerpen.", kategori: "sastra" },
+      { pertanyaan: "Saya suka menulis cerita.", kategori: "sastra" },
+      { pertanyaan: "Saya tertarik dengan karya sastra klasik.", kategori: "sastra" },
+      { pertanyaan: "Saya suka belajar bahasa asing.", kategori: "bahasa" },
+      { pertanyaan: "Saya mudah memahami struktur kalimat.", kategori: "bahasa" },
+      { pertanyaan: "Saya menikmati pelajaran bahasa Indonesia.", kategori: "bahasa" },
+      { pertanyaan: "Saya bisa menggambar dengan baik.", kategori: "seni" },
+      { pertanyaan: "Saya tertarik belajar alat musik.", kategori: "seni" },
+      { pertanyaan: "Saya suka mengikuti pertunjukan seni.", kategori: "seni" },
+      { pertanyaan: "Saya senang mengikuti kegiatan olahraga.", kategori: "olahraga" },
+      { pertanyaan: "Saya suka bergerak dan berlari.", kategori: "olahraga" },
+      { pertanyaan: "Saya tertarik menjadi atlet.", kategori: "olahraga" },
+      { pertanyaan: "Saya bisa menjaga stamina dengan baik.", kategori: "olahraga" },
+      { pertanyaan: "Saya suka menari atau pertunjukan gerak.", kategori: "seni" },
+      { pertanyaan: "Saya bisa mengingat kosa kata baru dengan cepat.", kategori: "bahasa" },
+      { pertanyaan: "Saya punya logika berpikir yang kuat.", kategori: "matematika" },
+      { pertanyaan: "Saya suka membuat puisi.", kategori: "sastra" }
+    ];
+
+    const skor = {
+      matematika: 0,
+      sastra: 0,
+      bahasa: 0,
+      seni: 0,
+      olahraga: 0
+    };
+
+    const bobot = {
+      "Sangat Tertarik": 5,
+      "Tertarik": 4,
+      "Biasa Saja": 3,
+      "Kurang Tertarik": 2,
+      "Sangat Kurang Tertarik": 1
+    };
+
+    const container = document.getElementById('soal-container');
+    soalList.forEach((soal, index) => {
+      const div = document.createElement('div');
+      div.className = "soal-box";
+      div.style.animationDelay = `${index * 0.05}s`;
+      div.innerHTML = `
+        <p>${index + 1}. ${soal.pertanyaan}</p>
+        <select data-kategori="${soal.kategori}">
+          <option value="">-- Pilih jawaban --</option>
+          ${Object.keys(bobot).map(k => `<option value="${k}">${k}</option>`).join('')}
+        </select>
+      `;
+      container.appendChild(div);
+    });
+
+    function lihatHasil() {
+      for (let k in skor) skor[k] = 0;
+
+      let lengkap = true;
+      const selects = document.querySelectorAll("select");
+      selects.forEach(select => {
+        const kategori = select.dataset.kategori;
+        const nilai = bobot[select.value];
+        if (!nilai) lengkap = false;
+        else skor[kategori] += nilai;
+      });
+
+      const hasilDiv = document.getElementById("hasil");
+      if (!lengkap) {
+        hasilDiv.innerHTML = `<p style="color:red; text-align:center; padding:20px;">Silakan isi semua pertanyaan terlebih dahulu!</p>`;
+        hasilDiv.classList.add('show');
+        return;
+      }
+
+      const countPerCategory = {};
+      soalList.forEach(soal => {
+        countPerCategory[soal.kategori] = (countPerCategory[soal.kategori] || 0) + 1;
+      });
+      
+      const persentase = {};
+      for (let k in skor) {
+        const maxScore = countPerCategory[k] * 5;
+        persentase[k] = Math.round((skor[k] / maxScore) * 100);
+      }
+
+      let hasilHTML = `<h3>Hasil Tes Minat dan Bakat</h3>`;
+      
+      const sortedCategories = Object.entries(skor).sort((a, b) => b[1] - a[1]);
+      
+      sortedCategories.forEach(([kategori, nilai]) => {
+        hasilHTML += `
+          <div class="hasil-item">
+            <p><strong>${capitalize(kategori)}:</strong> ${nilai} poin (${persentase[kategori]}%)</p>
+            <div class="progress-container">
+              <div class="progress-bar" style="width: ${persentase[kategori]}%"></div>
+            </div>
+          </div>
+        `;
+      });
+
+      const minatTertinggi = sortedCategories[0][0];
+      hasilHTML += `
+        <div class="minat-dominan">
+          <p><strong>Minat dominan Anda:</strong> <span>${capitalize(minatTertinggi)}</span></p>
+        </div>
+      `;
+
+      hasilDiv.innerHTML = hasilHTML;
+      hasilDiv.classList.add('show');
+      
+      setTimeout(() => {
+        document.querySelectorAll('.progress-bar').forEach(bar => {
+          bar.style.width = bar.style.width;
+        });
+      }, 300);
+    }
+
+    function capitalize(str) {
+      return str[0].toUpperCase() + str.slice(1);
+    }
+  </script>
+</body>
+  </html>
